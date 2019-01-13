@@ -1,0 +1,82 @@
+#Import des librairies nécessaires
+from math import *
+from tkinter import *
+from random import *
+
+print ("Jeu de Voronoï sur une droite")
+print ("Lancement du programme...\n")
+
+#Fonction milieu
+def milieu():
+    X=(j1[0]+j2[0])/2
+    ligne=canvas.create_line(X,0,X,25)
+
+
+#Affichage liste
+def print_list():
+    j1.sort()
+    j2.sort()
+    print ("Tour : ",len(j1))
+    print ("J1 : ",j1)
+    print ("J2 : ",j2)
+    print ()
+
+
+
+#Fonction qui fait jouer l'adversaire au hasard
+def hasard():
+    Xb=randint(1,749)
+    j2.append(Xb)
+    ligne=canvas.create_line(Xb,0,Xb,25, fill='green')
+
+
+#Fonction qui repère la position de la souris
+def clic (event):
+    Xa=event.x
+    Y=event.y
+    j1.append(Xa)
+    ligne=canvas.create_line(Xa,0,Xa,25, fill='red')
+    hasard()
+    print_list()
+    #milieu()
+    #partition()
+
+
+#Partitionage de la droite
+def partition():
+    if j1[0]<j2[0]:
+        canvas.create_rectangle(0,0,j1[0],25,fill='red')
+    else:
+        canvas.create_rectangle(0,0,j2[0],25, fill='green')
+    if j1[-1]<j2[-1]:
+        canvas.create_rectangle(j2[-1],0,750,25,fill='green')
+    else:
+        canvas.create_rectangle(j1[0],0,750,25, fill='red')
+
+#Effacer
+def clear():
+    canvas.delete(ALL)
+    j1=[]
+    j2=[]
+
+#Création de la fenêtre
+main = Tk ()
+main.title ("Jeu de Voronoï")
+main.geometry('1000x300+25+25')
+titre = Label (main, text="Bienvenue dans le jeu de Voronoï sur un segment")
+titre.pack()
+
+
+#Création du cadre de jeu
+canvas = Canvas(main, width=750, height=25, background='white')
+canvas.pack(padx=10, pady=100)
+
+effacer=Button(main, text="Effacer", command=clear)
+effacer.pack(padx=10,pady=80)
+
+#Listes des positions de jeu et compteur du nombre de tours
+j1=[]
+j2=[]
+
+canvas.bind('<Button-1>', clic)
+main.mainloop()
